@@ -116,7 +116,7 @@ public class MusicOrganizerWindow extends JFrame {
 					// TODO YOUR CODE HERE
 					// The code here gets invoked whenever the uses double clicks on the list of sound clips
 
-					//No use in this version
+					controller.playSoundClips();
 
 					System.out.println("clicked on clipTable");
 					
