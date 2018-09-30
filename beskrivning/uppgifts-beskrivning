@@ -1,0 +1,8 @@
+Uppgift 2
+Jonatan Lahtivuori 40601 & Anders Ahlström 38851
+
+Importera vår Album klass och lade till toString metoden som behövdes för att GUI skulle fungera.
+Gjorde metoderna färdigt så att programmet fungerar som det skall med vår Album klass. Där vi lagt till kod står
+det en kommentar.
+Har inte gjort några förändringar i den egna koden.
+
