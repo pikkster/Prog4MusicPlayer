@@ -1,16 +1,17 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 public class MusicOrganizerController {
 
 	private MusicOrganizerWindow view;
 	private SoundClipBlockingQueue queue;
 	private Album root;
+	private Stack<Album<SoundClip>> undoStack = new Stack<>();
+	private Stack<Album<SoundClip>> redoStack = new Stack<>();
 	
 	public MusicOrganizerController() {
-		
-		// TODO: Create the root album for all sound clips
-		//CHANGE TO OUR ALBUM CLASS
 		root = new Album<>("All Sound Clips");
 		
 		// Create the View in Model-View-Controller
@@ -51,6 +52,8 @@ public class MusicOrganizerController {
 	public void addNewAlbum(Album<SoundClip> album){ //TODO Update parameters if needed - e.g. you might want to give the currently selected album as parameter
 		// TODO: Add your code here
 		//ADDED CODE
+		addCurrentStateToUndoStack();
+
 		String newAlbum = view.promptForAlbumName();
 		try {
 			album.addAlbum(newAlbum);
@@ -66,6 +69,8 @@ public class MusicOrganizerController {
 	public void deleteAlbum(Album<SoundClip> albumToRemove){ //TODO Update parameters if needed
 		// TODO: Add your code here
 		//ADDED CODE
+		addCurrentStateToUndoStack();
+
 		Album parent = albumToRemove.getParent();
 //		System.out.println("remove " + albumToRemove.getName()+ " parent " + parent.getName());
 		parent.removeAlbum(albumToRemove);
@@ -75,10 +80,11 @@ public class MusicOrganizerController {
 	/**
 	 * Adds sound clips to an album
 	 */
-	public void addSoundClips(Album<SoundClip> albumToAddSong, List<SoundClip> soundclips){ //TODO Update parameters if needed
-		// TODO: Add your code here
+	public void addSoundClips(Album<SoundClip> albumToAddSong, List<SoundClip> soundClips){
 		//ADDED CODE
-		for (SoundClip sc : soundclips) {
+		addCurrentStateToUndoStack();
+
+		for (SoundClip sc : soundClips) {
 			albumToAddSong.addItem(sc);
 		}
 
@@ -90,10 +96,15 @@ public class MusicOrganizerController {
 	public void removeSoundClips(Album<SoundClip> albumToRemoveSong, List<SoundClip> soundclips){ //TODO Update parameters if needed
 		// TODO: Add your code here
 		//ADDED CODE
+		addCurrentStateToUndoStack();
 		for (SoundClip sc : soundclips) {
 			albumToRemoveSong.removeItem(sc);
 		}
 		view.onClipsUpdated();
+	}
+
+	private void addCurrentStateToUndoStack () {
+		undoStack.push(root.copy());
 	}
 	
 	/**
@@ -110,11 +121,23 @@ public class MusicOrganizerController {
 
 
 	public void undo () {
-		// TODO;
-
+		if(undoStack.size()>0) {
+			Album<SoundClip> state = undoStack.pop();
+			redoStack.push(root.copy());
+			this.root = state;
+			view.updateTree(root);
+		}
+		view.onClipsUpdated();
 	}
 
 	public void redo () {
-		// TODO;
+		if(redoStack.size()>0){
+			Album<SoundClip> state = redoStack.pop();
+			undoStack.push(root.copy());
+			this.root = state;
+			view.updateTree(root);
+		}
+		view.onClipsUpdated();
 	}
 }
+

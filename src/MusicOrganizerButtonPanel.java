@@ -101,6 +101,7 @@ public class MusicOrganizerButtonPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {	
 				controller.addSoundClips(view.getSelectedAlbum(),view.getSelectedSoundClips());
 
+
 			}
 		});
 		return addSoundClipButton;

@@ -10,10 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.event.MouseInputAdapter;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.DefaultTreeSelectionModel;
-import javax.swing.tree.TreePath;
+import javax.swing.tree.*;
 
 
 public class MusicOrganizerWindow extends JFrame {
@@ -64,7 +61,6 @@ public class MusicOrganizerWindow extends JFrame {
 	 * Make the tree showing album names. 
 	 */
 	private JTree makeCatalogTree() {
-		
 
 		DefaultMutableTreeNode tree_root = new DefaultMutableTreeNode();
 		tree_root.setUserObject((Album) controller.getRootAlbum());
@@ -86,8 +82,6 @@ public class MusicOrganizerWindow extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				// if left-double-click @@@changed =2 to ==1
 				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2){
-					
-					// TODO YOUR CODE HERE
 					// The code here gets invoked whenever the user double clicks in the album tree
 					//ADDED CODE
 					makeClipTable();
@@ -185,8 +179,7 @@ public class MusicOrganizerWindow extends JFrame {
 		//We search for the parent of the newly added Album so we can create the new node in the correct place
 		for(Enumeration e = ((DefaultMutableTreeNode) model.getRoot()).breadthFirstEnumeration(); e.hasMoreElements();){
 			DefaultMutableTreeNode parent = (DefaultMutableTreeNode) e.nextElement();
-			
-			// TODO: Get the parent album of newAlbum
+
 			Album parentAlbum;
 			//parentAlbum = newAlbum.getParentAlbum();
 			parentAlbum = newAlbum.getParent();
@@ -221,6 +214,25 @@ public class MusicOrganizerWindow extends JFrame {
 				}
 			}
 		}
+	}
+
+	public void updateTree (Album<SoundClip> root) {
+		DefaultTreeModel model = (DefaultTreeModel) albumTree.getModel();
+		DefaultMutableTreeNode newRoot = (DefaultMutableTreeNode) model.getRoot();
+		newRoot.setUserObject(root);
+		newRoot.removeAllChildren();
+		for(Album<SoundClip> a : root.getChildren()){
+			DefaultMutableTreeNode trnode = new DefaultMutableTreeNode();
+			trnode.setUserObject(a);
+			model.insertNodeInto(trnode, newRoot,
+					newRoot.getChildCount());
+
+		}
+		makeCatalogTree().clearSelection();
+		clipTable.display(root);
+		model.reload();
+
+
 	}
 	
 	/**

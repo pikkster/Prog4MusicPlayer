@@ -87,9 +87,22 @@ public class Album<T> {
         if(getAlbumByName(name)!=null) throw new AlbumNameAlreadyUsedException();
         this.children.add(new Album<T>(name,this));
     }
+    private void addAlbum (Album<T> album) {
+        this.children.add(album);
+    }
     //removes album
     public void removeAlbum (Album<T> album) {
         this.children.remove(album);
+    }
+    public Album<T> copy (){
+        Album<T> albumCopy = new Album<>(name,parent);
+        for (T i: items) {
+            albumCopy.addItem(i);
+        }
+        for (Album<T> a: children) {
+            albumCopy.addAlbum(a.copy());
+        }
+        return albumCopy;
     }
 }
 
