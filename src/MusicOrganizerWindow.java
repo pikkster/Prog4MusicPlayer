@@ -221,11 +221,10 @@ public class MusicOrganizerWindow extends JFrame {
 		DefaultMutableTreeNode newRoot = (DefaultMutableTreeNode) model.getRoot();
 		newRoot.setUserObject(root);
 		newRoot.removeAllChildren();
-		for(Album<SoundClip> a : root.getChildren()){
+		for (Album<SoundClip> a : root.getChildren()) {
 			DefaultMutableTreeNode trnode = new DefaultMutableTreeNode();
 			trnode.setUserObject(a);
-			model.insertNodeInto(trnode, newRoot,
-					newRoot.getChildCount());
+			model.insertNodeInto(trnode, newRoot, newRoot.getChildCount());
 
 		}
 		makeCatalogTree().clearSelection();

@@ -104,6 +104,10 @@ public class Album<T> {
         }
         return albumCopy;
     }
+
+    public boolean hasChildren () {
+        return children.size() != 0;
+    }
 }
 
 class AlbumNameAlreadyUsedException extends Exception{

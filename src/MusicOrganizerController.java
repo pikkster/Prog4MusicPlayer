@@ -127,7 +127,6 @@ public class MusicOrganizerController {
 			this.root = state;
 			view.updateTree(root);
 		}
-		view.onClipsUpdated();
 	}
 
 	public void redo () {
@@ -137,7 +136,6 @@ public class MusicOrganizerController {
 			this.root = state;
 			view.updateTree(root);
 		}
-		view.onClipsUpdated();
 	}
 }
 
