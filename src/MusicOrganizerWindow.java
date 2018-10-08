@@ -227,11 +227,7 @@ public class MusicOrganizerWindow extends JFrame {
 			model.insertNodeInto(trnode, newRoot, newRoot.getChildCount());
 
 		}
-		makeCatalogTree().clearSelection();
-		clipTable.display(root);
 		model.reload();
-
-
 	}
 	
 	/**

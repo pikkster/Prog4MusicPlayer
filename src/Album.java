@@ -24,15 +24,7 @@ public class Album<T> {
 
     }
 
-    /*
-     ADD toString for reasons.
-     */
     public String toString () {
-        return name;
-    }
-
-    //get name of album
-    public String getName() {
         return name;
     }
     //set name of album
@@ -104,10 +96,10 @@ public class Album<T> {
         }
         return albumCopy;
     }
-
     public boolean hasChildren () {
         return children.size() != 0;
     }
+
 }
 
 class AlbumNameAlreadyUsedException extends Exception{
