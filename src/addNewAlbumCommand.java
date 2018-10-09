@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class addNewAlbumCommand implements Command {
@@ -22,7 +23,6 @@ public class addNewAlbumCommand implements Command {
             this.memItems = items;
         }
     }
-
     public addNewAlbumCommand(Album<SoundClip> album, String newAlbum) {
         this.album = album;
         this.newAlbum = newAlbum;
@@ -30,20 +30,33 @@ public class addNewAlbumCommand implements Command {
 
     @Override
     public void execute() {
-        storedState = new Memento(album.getChildren(),
-                album.getParent(),
-                album.toString(),
-                album.getItems());
         try {
+            if (storedState == null) {
+                storedState = new Memento(album.getChildren(),
+                        album.getParent(),
+                        album.toString(),
+                        album.getItems());
+            } else {
+                for (Album<SoundClip> a : storedState.memChildren) {
+                    album.addAlbum(a);
+                }
+            }
             album.addAlbum(newAlbum);
-        } catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
-
     @Override
     public void undo() {
         album.removeAlbum(album.getAlbumByName(newAlbum));
+    }
+
+    public String getCommandType(){
+        return "addAlbum";
+    }
+
+    public Album<SoundClip> getAlbum () {
+        return album.getAlbumByName(newAlbum);
     }
 
 }

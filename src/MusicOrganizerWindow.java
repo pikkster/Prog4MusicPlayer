@@ -10,6 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.TreeModelEvent;
 import javax.swing.tree.*;
 
 
@@ -228,6 +229,7 @@ public class MusicOrganizerWindow extends JFrame {
 
 		}
 		model.reload();
+		albumTree.setModel(model);
 	}
 	
 	/**

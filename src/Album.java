@@ -79,7 +79,7 @@ public class Album<T> {
         if(getAlbumByName(name)!=null) throw new AlbumNameAlreadyUsedException();
         this.children.add(new Album<T>(name,this));
     }
-    private void addAlbum (Album<T> album) {
+    public void addAlbum (Album<T> album) {
         this.children.add(album);
     }
     //removes album

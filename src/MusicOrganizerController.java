@@ -60,7 +60,7 @@ public class MusicOrganizerController {
 	/**
 	 * Removes an album from the Music Organizer
 	 */
-	public void deleteAlbum(Album<SoundClip> albumToRemove){ //TODO Update parameters if needed
+	public void deleteAlbum(Album<SoundClip> albumToRemove){
 		Command command = new deleteAlbumCommand(albumToRemove, albumToRemove.getParent());
 		command.execute();
 		undoStack.push(command);
@@ -71,10 +71,10 @@ public class MusicOrganizerController {
 	 * Adds sound clips to an album
 	 */
 	public void addSoundClips(Album<SoundClip> albumToAddSong, List<SoundClip> soundClips){
-		for (SoundClip sc : soundClips) {
-			albumToAddSong.addItem(sc);
-		}
-
+		Command command = new addSoundClipsCommand(albumToAddSong,soundClips);
+		command.execute();
+		undoStack.push(command);
+		view.onClipsUpdated();
 	}
 	
 	/**
@@ -101,18 +101,20 @@ public class MusicOrganizerController {
 
 	public void undo () {
 		if (undoStack.size()>0) {
-			Command state = undoStack.pop();
-			redoStack.push(state);
-			state.undo();
+			Command command = undoStack.pop();
+			redoStack.push(command);
+			command.undo();
+			view.updateTree(root);
 		}
-		view.updateTree(root);
 	}
 	public void redo () {
 		if (redoStack.size()>0) {
 			Command command = redoStack.pop();
 			command.execute();
+			undoStack.push(command);
+			view.updateTree(root);
 		}
-		view.updateTree(root);
+
 	}
 }
 

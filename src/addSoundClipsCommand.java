@@ -1,11 +1,9 @@
-import javafx.scene.paint.Stop;
-
 import java.util.List;
 
-public class deleteAlbumCommand implements Command{
+public class addSoundClipsCommand implements Command {
 
-    Album<SoundClip> album;
-    Album<SoundClip> parent;
+    Album<SoundClip> albumToAddSong;
+    List<SoundClip> soundClips;
     private Memento storedState;
 
     private class Memento {
@@ -25,33 +23,33 @@ public class deleteAlbumCommand implements Command{
         }
     }
 
-    public deleteAlbumCommand (Album<SoundClip> albumToRemove, Album<SoundClip> parent) {
-        this.album = albumToRemove;
-        this.parent = parent;
+    public addSoundClipsCommand (Album<SoundClip> albumToAddSong, List<SoundClip> soundClips) {
+        this.albumToAddSong = albumToAddSong;
+        this.soundClips = soundClips;
     }
+
     @Override
     public void execute() {
-        storedState = new Memento(album.getChildren(),
-                album.getParent(),
-                album.toString(),
-                album.getItems());
-        parent.removeAlbum(album);
+        storedState = new Memento(albumToAddSong.getChildren(),
+                albumToAddSong.getParent(),
+                albumToAddSong.toString(),
+                albumToAddSong.getItems());
+        for (SoundClip sc : soundClips) {
+            albumToAddSong.addItem(sc);
+        }
     }
 
     @Override
     public void undo() {
-        try {
-            parent.addAlbum(storedState.memName);
-        } catch (Exception e) {
-
+        for(SoundClip sc : soundClips) {
+            albumToAddSong.removeItem(sc);
         }
     }
 
     public String getCommandType(){
-        return "deleteAlbum";
+        return "addSoundClips";
     }
-
     public Album<SoundClip> getAlbum () {
-        return album;
+        return albumToAddSong;
     }
 }
