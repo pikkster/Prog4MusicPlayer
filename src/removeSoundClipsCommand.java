@@ -1,9 +1,9 @@
 import java.util.List;
 
-public class addNewAlbumCommand implements Command {
+public class removeSoundClipsCommand implements Command {
 
     Album<SoundClip> album;
-    String newAlbum;
+    List<SoundClip> soundClips;
     private Memento storedState;
 
     private class Memento {
@@ -25,40 +25,32 @@ public class addNewAlbumCommand implements Command {
         }
     }
 
-    public addNewAlbumCommand(Album<SoundClip> album, String newAlbum) {
+    public removeSoundClipsCommand (Album<SoundClip> album, List<SoundClip> soundClips) {
         this.album = album;
-        this.newAlbum = newAlbum;
+        this.soundClips = soundClips;
     }
 
     @Override
     public void execute() {
-        storedState = new Memento(album.getChildren(),
-                album.getParent(),
-                album.toString(),
-                album.getItems());
-        try {
-            album.addAlbum(newAlbum);
-        } catch (Exception e){
-
+        for (SoundClip sc : soundClips) {
+            album.removeItem(sc);
         }
     }
 
     @Override
     public void undo() {
-        album.removeAlbum(album.getAlbumByName(newAlbum));
+        for (SoundClip sc :  soundClips) {
+            album.addItem(sc);
+        }
     }
 
     @Override
     public void redo() {
-        try {
-            album.addAlbum(newAlbum);
-        } catch (Exception e) {
-
+        for (SoundClip sc : soundClips) {
+            album.removeItem(sc);
         }
     }
-
     public String commandAction() {
-        return "album";
+        return null;
     }
-
 }

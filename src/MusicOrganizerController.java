@@ -11,9 +11,6 @@ public class MusicOrganizerController {
 	private Stack<Command> undoStack = new Stack<>();
 	private Stack<Command> redoStack = new Stack<>();
 
-
-
-	
 	public MusicOrganizerController() {
 		root = new Album<>("All Sound Clips");
 		
@@ -71,19 +68,20 @@ public class MusicOrganizerController {
 	 * Adds sound clips to an album
 	 */
 	public void addSoundClips(Album<SoundClip> albumToAddSong, List<SoundClip> soundClips){
-		for (SoundClip sc : soundClips) {
-			albumToAddSong.addItem(sc);
-		}
-
+		Command command = new addSoundClipsCommand(albumToAddSong,soundClips);
+		command.execute();
+		undoStack.push(command);
+		view.onClipsUpdated();
 	}
 	
 	/**
 	 * Removes sound clips from an album
 	 */
 	public void removeSoundClips(Album<SoundClip> albumToRemoveSong, List<SoundClip> soundclips){ //TODO Update parameters if needed
-		for (SoundClip sc : soundclips) {
-			albumToRemoveSong.removeItem(sc);
-		}
+		Command command = new removeSoundClipsCommand(albumToRemoveSong, soundclips);
+		command.execute();
+		undoStack.push(command);
+
 		view.onClipsUpdated();
 	}
 
@@ -101,18 +99,27 @@ public class MusicOrganizerController {
 
 	public void undo () {
 		if (undoStack.size()>0) {
-			Command state = undoStack.pop();
-			redoStack.push(state);
-			state.undo();
+			Command command = undoStack.pop();
+			redoStack.push(command);
+			command.undo();
+			if (command.commandAction()=="album") {
+				view.updateTree(root);
+			} else {
+				view.onClipsUpdated();
+			}
 		}
-		view.updateTree(root);
 	}
 	public void redo () {
 		if (redoStack.size()>0) {
 			Command command = redoStack.pop();
-			command.execute();
+			undoStack.push(command);
+			command.redo();
+			if (command.commandAction()=="album") {
+				view.updateTree(root);
+			} else {
+				view.onClipsUpdated();
+			}
 		}
-		view.updateTree(root);
 	}
 }
 
