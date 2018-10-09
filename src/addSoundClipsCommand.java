@@ -2,7 +2,7 @@ import java.util.List;
 
 public class addSoundClipsCommand implements Command {
 
-    Album<SoundClip> albumToAddSong;
+    Album<SoundClip> album;
     List<SoundClip> soundClips;
     private Memento storedState;
 
@@ -20,36 +20,42 @@ public class addSoundClipsCommand implements Command {
             this.memParent = parent;
             this.memName = name;
             this.memItems = items;
+
+            System.out.println("name " + memName + " parent " + memParent + " nr. of children = " + memChildren.size());
         }
+
     }
 
     public addSoundClipsCommand (Album<SoundClip> albumToAddSong, List<SoundClip> soundClips) {
-        this.albumToAddSong = albumToAddSong;
+        this.album = albumToAddSong;
         this.soundClips = soundClips;
     }
 
     @Override
     public void execute() {
-        storedState = new Memento(albumToAddSong.getChildren(),
-                albumToAddSong.getParent(),
-                albumToAddSong.toString(),
-                albumToAddSong.getItems());
+        storedState = new Memento(album.getChildren(),
+                album.getParent(),
+                album.toString(),
+                album.getItems());
         for (SoundClip sc : soundClips) {
-            albumToAddSong.addItem(sc);
+            album.addItem(sc);
         }
     }
 
     @Override
     public void undo() {
         for(SoundClip sc : soundClips) {
-            albumToAddSong.removeItem(sc);
+            album.removeItem(sc);
         }
     }
 
-    public String getCommandType(){
-        return "addSoundClips";
+    @Override
+    public void redo() {
+        for (SoundClip sc : soundClips) {
+            album.addItem(sc);
+        }
     }
-    public Album<SoundClip> getAlbum () {
-        return albumToAddSong;
+    public String commandAction() {
+        return null;
     }
 }

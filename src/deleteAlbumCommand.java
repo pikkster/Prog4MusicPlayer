@@ -22,6 +22,9 @@ public class deleteAlbumCommand implements Command{
             this.memParent = parent;
             this.memName = name;
             this.memItems = items;
+
+            System.out.println("name " + memName + " parent " + memParent + " nr. of children = " + memChildren.size());
+
         }
     }
 
@@ -47,11 +50,17 @@ public class deleteAlbumCommand implements Command{
         }
     }
 
-    public String getCommandType(){
-        return "deleteAlbum";
+    @Override
+    public void redo() {
+        try {
+            parent.removeAlbum(album);
+        } catch (Exception e) {
+
+        }
     }
 
-    public Album<SoundClip> getAlbum () {
-        return album;
+    public String commandAction() {
+        return "album";
     }
+
 }

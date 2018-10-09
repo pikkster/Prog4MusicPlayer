@@ -10,7 +10,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.event.MouseInputAdapter;
-import javax.swing.event.TreeModelEvent;
 import javax.swing.tree.*;
 
 
@@ -107,15 +106,8 @@ public class MusicOrganizerWindow extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				// if left-double-click @@@changed =2 to ==1
 				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2){
-					
-					// TODO YOUR CODE HERE
-					// The code here gets invoked whenever the uses double clicks on the list of sound clips
-					//ADDED CODE
 					controller.playSoundClips();
-
 					System.out.println("clicked on clipTable");
-					
-					
 				}
 			}
 		});
@@ -217,19 +209,38 @@ public class MusicOrganizerWindow extends JFrame {
 		}
 	}
 
+
+	//TODO; Fungerar bara en subNode ner i trädet borde vara rekursion
+
 	public void updateTree (Album<SoundClip> root) {
 		DefaultTreeModel model = (DefaultTreeModel) albumTree.getModel();
-		DefaultMutableTreeNode newRoot = (DefaultMutableTreeNode) model.getRoot();
-		newRoot.setUserObject(root);
-		newRoot.removeAllChildren();
-		for (Album<SoundClip> a : root.getChildren()) {
-			DefaultMutableTreeNode trnode = new DefaultMutableTreeNode();
-			trnode.setUserObject(a);
-			model.insertNodeInto(trnode, newRoot, newRoot.getChildCount());
+		DefaultMutableTreeNode Root = (DefaultMutableTreeNode) model.getRoot();
 
-		}
+		Root.setUserObject(root);
+		Root.removeAllChildren();
+
+			for (Album<SoundClip> a : root.getChildren()) {
+				DefaultMutableTreeNode trnode = new DefaultMutableTreeNode();
+				trnode.setUserObject(a);
+
+				if (!a.getChildren().isEmpty()) {
+					for (Album<SoundClip> b : a.getChildren()) {
+						updateTreeRec(b, trnode, model);
+					}
+				}
+
+				model.insertNodeInto(trnode, Root, Root.getChildCount());
+			}
+
 		model.reload();
-		albumTree.setModel(model);
+		albumTree.scrollPathToVisible(new TreePath(Root.getPath()));
+	}
+
+	private void updateTreeRec(Album<SoundClip> album, DefaultMutableTreeNode newRoot, DefaultTreeModel model) {
+
+		DefaultMutableTreeNode subNode = new DefaultMutableTreeNode();
+		subNode.setUserObject(album);
+		model.insertNodeInto(subNode, newRoot, newRoot.getChildCount());
 	}
 	
 	/**
