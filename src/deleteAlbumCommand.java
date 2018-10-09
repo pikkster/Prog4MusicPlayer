@@ -1,5 +1,3 @@
-import javafx.scene.paint.Stop;
-
 import java.util.List;
 
 public class deleteAlbumCommand implements Command{

@@ -51,6 +51,7 @@ public class MusicOrganizerController {
 		Command command = new addNewAlbumCommand(album, newAlbum);
 		command.execute();
 		undoStack.push(command);
+		undoPush(command);
 		view.onAlbumAdded(album.getAlbumByName(newAlbum));
 	}
 	
@@ -61,6 +62,7 @@ public class MusicOrganizerController {
 		Command command = new deleteAlbumCommand(albumToRemove, albumToRemove.getParent());
 		command.execute();
 		undoStack.push(command);
+		undoPush(command);
 		view.onAlbumRemoved(albumToRemove);
 	}
 	
@@ -71,6 +73,7 @@ public class MusicOrganizerController {
 		Command command = new addSoundClipsCommand(albumToAddSong,soundClips);
 		command.execute();
 		undoStack.push(command);
+		undoPush(command);
 		view.onClipsUpdated();
 	}
 	
@@ -81,7 +84,7 @@ public class MusicOrganizerController {
 		Command command = new removeSoundClipsCommand(albumToRemoveSong, soundclips);
 		command.execute();
 		undoStack.push(command);
-
+		undoPush(command);
 		view.onClipsUpdated();
 	}
 
@@ -107,6 +110,10 @@ public class MusicOrganizerController {
 			} else {
 				view.onClipsUpdated();
 			}
+			view.setRedoEnabled(true);
+			if(undoStack.size()==0){
+				view.setUndoEnabled(false);
+			}
 		}
 	}
 	public void redo () {
@@ -119,7 +126,15 @@ public class MusicOrganizerController {
 			} else {
 				view.onClipsUpdated();
 			}
+			if(redoStack.size()==0){
+				view.setRedoEnabled(false);
+			}
 		}
+	}
+
+	private void undoPush(Command command){
+		undoStack.push(command);
+		view.setUndoEnabled(true);
 	}
 }
 
