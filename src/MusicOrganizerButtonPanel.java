@@ -19,6 +19,8 @@ public class MusicOrganizerButtonPanel extends JPanel {
 	private JButton playButton;
 	private JButton undoButton;
 	private JButton redoButton;
+	private JButton flagButton;
+	private JButton ratingButton;
 
 	
 	public MusicOrganizerButtonPanel(MusicOrganizerController contr, MusicOrganizerWindow view){
@@ -50,6 +52,12 @@ public class MusicOrganizerButtonPanel extends JPanel {
 
 		redoButton = createRedoButton();
 		toolbar.add(redoButton);
+
+		flagButton = createFlagButton();
+		toolbar.add(flagButton);
+
+		ratingButton = createRatingButton();
+		toolbar.add(ratingButton);
 		
 		this.add(toolbar);
 
@@ -155,6 +163,26 @@ public class MusicOrganizerButtonPanel extends JPanel {
 
 	public void setRedoEnabled(boolean enabled){
 		this.redoButton.setEnabled(enabled);
+	}
+
+	private JButton createFlagButton() {
+		ImageIcon flagIcon = new ImageIcon("icons/Actions-flag-icon.png");
+		JButton redoButton = new JButton(flagIcon);
+		redoButton.setToolTipText("Redo");
+		redoButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {controller.flag();}
+		});
+		return redoButton;
+	}
+
+	private JButton createRatingButton() {
+		ImageIcon ratingIcon = new ImageIcon("icons/favourites_32.png");
+		JButton redoButton = new JButton(ratingIcon);
+		redoButton.setToolTipText("Redo");
+		redoButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {controller.rating();}
+		});
+		return redoButton;
 	}
 
 }

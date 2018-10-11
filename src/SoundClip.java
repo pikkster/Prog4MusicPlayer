@@ -7,6 +7,8 @@ import java.io.File;
 public class SoundClip {
 
 	private final File file;
+	private boolean flagged;
+	private int rating;
 	
 	/**
 	 * Make a SoundClip from a file.
@@ -15,6 +17,8 @@ public class SoundClip {
 	public SoundClip(File file) {
 		assert file != null;
 		this.file = file;
+		this.flagged = false;
+		this.rating = 0;
 	}
 
 	/**
@@ -26,6 +30,21 @@ public class SoundClip {
 	
 	public String toString(){
 		return file.getName();
+	}
+
+	public void setFlagged (boolean flag) {
+		this.flagged = flag;
+	}
+	public boolean getFlagged () {
+		return flagged;
+	}
+
+	public void setRating (int rating) {
+		this.rating = rating;
+	}
+
+	public int getRating () {
+		return rating;
 	}
 	
 	@Override

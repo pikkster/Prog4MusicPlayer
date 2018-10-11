@@ -10,6 +10,8 @@ public class MusicOrganizerController {
 	private Album root;
 	private Stack<Command> undoStack = new Stack<>();
 	private Stack<Command> redoStack = new Stack<>();
+	private Album flaggedAlbum;
+	private Album ratingAlbum;
 
 	public MusicOrganizerController() {
 		root = new Album<>("All Sound Clips");
@@ -41,6 +43,16 @@ public class MusicOrganizerController {
 	 */
 	public Album<SoundClip> getRootAlbum(){
 		return root;
+	}
+
+	public Album<SoundClip> getFlaggedAlbum(){
+		flaggedAlbum = new Album<>("Flagged");
+		return flaggedAlbum;
+	}
+
+	public Album<SoundClip> getRatingAlbum () {
+		ratingAlbum = new Album<>("Rated Songs");
+		return ratingAlbum;
 	}
 	
 	/**
@@ -84,8 +96,10 @@ public class MusicOrganizerController {
 	/**
 	 * Removes sound clips from an album
 	 */
-	public void removeSoundClips(Album<SoundClip> albumToRemoveSong, List<SoundClip> soundclips){ //TODO Update parameters if needed
-		Command command = new removeSoundClipsCommand(albumToRemoveSong, soundclips);
+	public void removeSoundClips(Album<SoundClip> albumToRemoveSong, List<SoundClip> soundclips){
+		Command command = new removeSoundClipsCommand(albumToRemoveSong,
+				soundclips,
+				view);
 		command.execute();
 		undoStack.push(command);
 		undoPush(command);
@@ -128,6 +142,14 @@ public class MusicOrganizerController {
 	private void undoPush(Command command){
 		undoStack.push(command);
 		view.setUndoEnabled(true);
+	}
+
+	public void flag () {
+
+	}
+
+	public void rating () {
+
 	}
 }
 

@@ -28,9 +28,6 @@ public class Album<T> {
         return name;
     }
     //set name of album
-    public void setName(String name) {
-        this.name = name;
-    }
     //returns a ArrayList<T> with all items in album
     public List<T> getItems() {
         return items;

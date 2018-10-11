@@ -48,6 +48,8 @@ public class MusicOrganizerWindow extends JFrame {
 
 		this.setRedoEnabled(false);
 		this.setUndoEnabled(false);
+
+		addFlaggedRating(albumTree);
 				
 		// give the whole window a good default size
 		this.setTitle("Music Organizer");
@@ -55,6 +57,7 @@ public class MusicOrganizerWindow extends JFrame {
 
 		// end the program when the user presses the window's Close button
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);
 				
 		this.setVisible(true);
 		
@@ -67,6 +70,7 @@ public class MusicOrganizerWindow extends JFrame {
 
 		DefaultMutableTreeNode tree_root = new DefaultMutableTreeNode();
 		tree_root.setUserObject((Album) controller.getRootAlbum());
+
 		
 		final JTree tree = new JTree(tree_root);
 		tree.setMinimumSize(new Dimension(200, 400));
@@ -95,6 +99,24 @@ public class MusicOrganizerWindow extends JFrame {
 		});
 
 		return tree;
+	}
+
+	private void addFlaggedRating (JTree albumTree) {
+		DefaultTreeModel model = (DefaultTreeModel) albumTree.getModel();
+
+		DefaultMutableTreeNode tree_root = (DefaultMutableTreeNode) model.getRoot();
+
+		DefaultMutableTreeNode flagged = new DefaultMutableTreeNode();
+		flagged.setUserObject(controller.getFlaggedAlbum());
+
+		DefaultMutableTreeNode rating = new DefaultMutableTreeNode();
+		rating.setUserObject(controller.getRatingAlbum());
+
+		model.insertNodeInto(flagged,tree_root,tree_root.getChildCount());
+		model.insertNodeInto(rating, tree_root, tree_root.getChildCount());
+
+		model.reload();
+
 	}
 
 	/**
@@ -210,40 +232,6 @@ public class MusicOrganizerWindow extends JFrame {
 				}
 			}
 		}
-	}
-
-
-	//TODO; Fungerar bara en subNode ner i trädet borde vara rekursion
-
-	public void updateTree (Album<SoundClip> root) {
-		DefaultTreeModel model = (DefaultTreeModel) albumTree.getModel();
-		DefaultMutableTreeNode Root = (DefaultMutableTreeNode) model.getRoot();
-
-		Root.setUserObject(root);
-		Root.removeAllChildren();
-
-			for (Album<SoundClip> a : root.getChildren()) {
-				DefaultMutableTreeNode trnode = new DefaultMutableTreeNode();
-				trnode.setUserObject(a);
-
-				if (!a.getChildren().isEmpty()) {
-					for (Album<SoundClip> b : a.getChildren()) {
-						updateTreeRec(b, trnode, model);
-					}
-				}
-
-				model.insertNodeInto(trnode, Root, Root.getChildCount());
-			}
-
-		model.reload();
-		albumTree.scrollPathToVisible(new TreePath(Root.getPath()));
-	}
-
-	private void updateTreeRec(Album<SoundClip> album, DefaultMutableTreeNode newRoot, DefaultTreeModel model) {
-
-		DefaultMutableTreeNode subNode = new DefaultMutableTreeNode();
-		subNode.setUserObject(album);
-		model.insertNodeInto(subNode, newRoot, newRoot.getChildCount());
 	}
 	
 	/**

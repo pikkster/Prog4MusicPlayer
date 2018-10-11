@@ -4,30 +4,14 @@ public class removeSoundClipsCommand implements Command {
 
     Album<SoundClip> album;
     List<SoundClip> soundClips;
-    private Memento storedState;
+    MusicOrganizerWindow view;
 
-    private class Memento {
-        private List<Album<SoundClip>> memChildren;
-        private Album<SoundClip> memParent;
-        private String memName;
-        private List<SoundClip> memItems;
-
-        public Memento(List<Album<SoundClip>> children,
-                       Album<SoundClip> parent,
-                       String name,
-                       List<SoundClip> items) {
-            this.memChildren = children;
-            this.memParent = parent;
-            this.memName = name;
-            this.memItems = items;
-
-            System.out.println("name " + memName + " parent " + memParent + " nr. of children = " + memChildren.size());
-        }
-    }
-
-    public removeSoundClipsCommand (Album<SoundClip> album, List<SoundClip> soundClips) {
+    public removeSoundClipsCommand (Album<SoundClip> album,
+                                    List<SoundClip> soundClips,
+                                    MusicOrganizerWindow view) {
         this.album = album;
         this.soundClips = soundClips;
+        this.view = view;
     }
 
     @Override
@@ -35,6 +19,7 @@ public class removeSoundClipsCommand implements Command {
         for (SoundClip sc : soundClips) {
             album.removeItem(sc);
         }
+        view.onClipsUpdated();
     }
 
     @Override
@@ -42,12 +27,11 @@ public class removeSoundClipsCommand implements Command {
         for (SoundClip sc :  soundClips) {
             album.addItem(sc);
         }
+        view.onClipsUpdated();
     }
 
     @Override
     public void redo() {
-        for (SoundClip sc : soundClips) {
-            album.removeItem(sc);
-        }
+        this.execute();
     }
 }

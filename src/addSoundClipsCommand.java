@@ -6,6 +6,7 @@ public class addSoundClipsCommand implements Command {
     private List<SoundClip> soundClips;
     MusicOrganizerWindow view;
 
+
     public addSoundClipsCommand (Album<SoundClip> albumToAddSong,
                                  List<SoundClip> soundClips,
                                  MusicOrganizerWindow view) {
