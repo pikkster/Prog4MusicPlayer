@@ -1,50 +1,34 @@
-import javafx.scene.paint.Stop;
-
-import java.util.List;
-
 public class deleteAlbumCommand implements Command{
 
-    Album<SoundClip> album;
-    Album<SoundClip> parent;
-    private Memento storedState;
+    private Album<SoundClip> albumToRemove;
+    private Album<SoundClip> parent;
+    MusicOrganizerWindow view;
 
-    private class Memento {
-        private List<Album<SoundClip>> memChildren;
-        private Album<SoundClip> memParent;
-        private String memName;
-        private List<SoundClip> memItems;
-
-        public Memento(List<Album<SoundClip>> children,
-                       Album<SoundClip> parent,
-                       String name,
-                       List<SoundClip> items) {
-            this.memChildren = children;
-            this.memParent = parent;
-            this.memName = name;
-            this.memItems = items;
-
-            System.out.println("name " + memName + " parent " + memParent + " nr. of children = " + memChildren.size());
-
-        }
-    }
-
-    public deleteAlbumCommand (Album<SoundClip> albumToRemove, Album<SoundClip> parent) {
-        this.album = albumToRemove;
+    public deleteAlbumCommand (Album<SoundClip> albumToRemove,
+                               Album<SoundClip> parent,
+                               MusicOrganizerWindow view) {
+        this.albumToRemove = albumToRemove;
         this.parent = parent;
+        this.view = view;
     }
     @Override
     public void execute() {
-        storedState = new Memento(album.getChildren(),
-                album.getParent(),
-                album.toString(),
-                album.getItems());
-        parent.removeAlbum(album);
+        this.parent.removeAlbum(albumToRemove);
+        view.onAlbumRemoved(albumToRemove);
+
     }
 
     @Override
     public void undo() {
         try {
-            parent.addAlbum(storedState.memName);
+            parent.addAlbum(albumToRemove.toString());
+            view.onAlbumAdded(albumToRemove);
+
+            for(int i = 0; i<albumToRemove.getChildren().size(); i++) {
+                updateTree(albumToRemove.getChildren().get(i));
+            }
+
+
         } catch (Exception e) {
 
         }
@@ -52,15 +36,14 @@ public class deleteAlbumCommand implements Command{
 
     @Override
     public void redo() {
-        try {
-            parent.removeAlbum(album);
-        } catch (Exception e) {
-
-        }
+        this.execute();
     }
 
-    public String commandAction() {
-        return "album";
+    private void updateTree (Album<SoundClip> album){
+        view.onAlbumAdded(album);
+        for(int i = 0; i<album.getChildren().size(); i++) {
+            updateTree(album.getChildren().get(i));
+        }
     }
 
 }

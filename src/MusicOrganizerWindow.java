@@ -45,6 +45,9 @@ public class MusicOrganizerWindow extends JFrame {
 		JSplitPane horizontalSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, buttonPanel, splitPane);
 
 		this.add(horizontalSplit);
+
+		this.setRedoEnabled(false);
+		this.setUndoEnabled(false);
 				
 		// give the whole window a good default size
 		this.setTitle("Music Organizer");
@@ -251,5 +254,12 @@ public class MusicOrganizerWindow extends JFrame {
 		Album a = (Album) getSelectedTreeNode().getUserObject();
 
 		clipTable.display(a);
+	}
+	public void setUndoEnabled(boolean enabled){
+		this.buttonPanel.setUndoEnabled(enabled);
+	}
+
+	public void setRedoEnabled(boolean enabled){
+		this.buttonPanel.setRedoEnabled(enabled);
 	}
 }

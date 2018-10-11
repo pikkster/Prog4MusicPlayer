@@ -50,7 +50,4 @@ public class removeSoundClipsCommand implements Command {
             album.removeItem(sc);
         }
     }
-    public String commandAction() {
-        return null;
-    }
 }

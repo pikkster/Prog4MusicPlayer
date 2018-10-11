@@ -48,30 +48,37 @@ public class MusicOrganizerController {
 	 */
 	public void addNewAlbum(Album<SoundClip> album){
 		String newAlbum = view.promptForAlbumName();
-		Command command = new addNewAlbumCommand(album, newAlbum);
+		Command command = new addNewAlbumCommand(album, newAlbum,view);
 		command.execute();
 		undoStack.push(command);
-		view.onAlbumAdded(album.getAlbumByName(newAlbum));
+		undoPush(command);
+
 	}
 	
 	/**
 	 * Removes an album from the Music Organizer
 	 */
-	public void deleteAlbum(Album<SoundClip> albumToRemove){ //TODO Update parameters if needed
-		Command command = new deleteAlbumCommand(albumToRemove, albumToRemove.getParent());
+	public void deleteAlbum(Album<SoundClip> albumToRemove){
+		Command command = new deleteAlbumCommand(albumToRemove,
+				albumToRemove.getParent(),
+				view);
 		command.execute();
 		undoStack.push(command);
-		view.onAlbumRemoved(albumToRemove);
+		undoPush(command);
+
 	}
 	
 	/**
 	 * Adds sound clips to an album
 	 */
 	public void addSoundClips(Album<SoundClip> albumToAddSong, List<SoundClip> soundClips){
-		Command command = new addSoundClipsCommand(albumToAddSong,soundClips);
+		Command command = new addSoundClipsCommand(albumToAddSong,
+				soundClips,
+				view);
 		command.execute();
 		undoStack.push(command);
-		view.onClipsUpdated();
+		undoPush(command);
+
 	}
 	
 	/**
@@ -81,8 +88,8 @@ public class MusicOrganizerController {
 		Command command = new removeSoundClipsCommand(albumToRemoveSong, soundclips);
 		command.execute();
 		undoStack.push(command);
+		undoPush(command);
 
-		view.onClipsUpdated();
 	}
 
 	/**
@@ -102,10 +109,9 @@ public class MusicOrganizerController {
 			Command command = undoStack.pop();
 			redoStack.push(command);
 			command.undo();
-			if (command.commandAction()=="album") {
-				view.updateTree(root);
-			} else {
-				view.onClipsUpdated();
+			view.setRedoEnabled(true);
+			if(undoStack.size()==0){
+				view.setUndoEnabled(false);
 			}
 		}
 	}
@@ -114,12 +120,14 @@ public class MusicOrganizerController {
 			Command command = redoStack.pop();
 			undoStack.push(command);
 			command.redo();
-			if (command.commandAction()=="album") {
-				view.updateTree(root);
-			} else {
-				view.onClipsUpdated();
+			if(redoStack.size()==0){
+				view.setRedoEnabled(false);
 			}
 		}
+	}
+	private void undoPush(Command command){
+		undoStack.push(command);
+		view.setUndoEnabled(true);
 	}
 }
 

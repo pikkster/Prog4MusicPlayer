@@ -1,43 +1,24 @@
-import java.util.List;
-
 public class addNewAlbumCommand implements Command {
 
-    Album<SoundClip> album;
-    String newAlbum;
-    private Memento storedState;
+    private Album<SoundClip> album;
+    private String newAlbum;
+    private Album<SoundClip> temp;
+    MusicOrganizerWindow view;
 
-    private class Memento {
-        private List<Album<SoundClip>> memChildren;
-        private Album<SoundClip> memParent;
-        private String memName;
-        private List<SoundClip> memItems;
-
-        public Memento(List<Album<SoundClip>> children,
-                       Album<SoundClip> parent,
-                       String name,
-                       List<SoundClip> items) {
-            this.memChildren = children;
-            this.memParent = parent;
-            this.memName = name;
-            this.memItems = items;
-
-            System.out.println("name " + memName + " parent " + memParent + " nr. of children = " + memChildren.size());
-        }
-    }
-
-    public addNewAlbumCommand(Album<SoundClip> album, String newAlbum) {
+    public addNewAlbumCommand(Album<SoundClip> album,
+                              String newAlbum,
+                              MusicOrganizerWindow view) {
         this.album = album;
         this.newAlbum = newAlbum;
+        this.view = view;
     }
 
     @Override
     public void execute() {
-        storedState = new Memento(album.getChildren(),
-                album.getParent(),
-                album.toString(),
-                album.getItems());
         try {
             album.addAlbum(newAlbum);
+            temp = album.getAlbumByName(newAlbum);
+            view.onAlbumAdded(temp);
         } catch (Exception e){
 
         }
@@ -45,20 +26,14 @@ public class addNewAlbumCommand implements Command {
 
     @Override
     public void undo() {
-        album.removeAlbum(album.getAlbumByName(newAlbum));
+        album.removeAlbum(temp);
+        view.onAlbumRemoved(temp);
     }
 
     @Override
     public void redo() {
-        try {
-            album.addAlbum(newAlbum);
-        } catch (Exception e) {
-
-        }
+        this.execute();
     }
 
-    public String commandAction() {
-        return "album";
-    }
 
 }

@@ -2,44 +2,24 @@ import java.util.List;
 
 public class addSoundClipsCommand implements Command {
 
-    Album<SoundClip> album;
-    List<SoundClip> soundClips;
-    private Memento storedState;
+    private Album<SoundClip> album;
+    private List<SoundClip> soundClips;
+    MusicOrganizerWindow view;
 
-    private class Memento {
-        private List<Album<SoundClip>> memChildren;
-        private Album<SoundClip> memParent;
-        private String memName;
-        private List<SoundClip> memItems;
-
-        public Memento(List<Album<SoundClip>> children,
-                       Album<SoundClip> parent,
-                       String name,
-                       List<SoundClip> items) {
-            this.memChildren = children;
-            this.memParent = parent;
-            this.memName = name;
-            this.memItems = items;
-
-            System.out.println("name " + memName + " parent " + memParent + " nr. of children = " + memChildren.size());
-        }
-
-    }
-
-    public addSoundClipsCommand (Album<SoundClip> albumToAddSong, List<SoundClip> soundClips) {
+    public addSoundClipsCommand (Album<SoundClip> albumToAddSong,
+                                 List<SoundClip> soundClips,
+                                 MusicOrganizerWindow view) {
         this.album = albumToAddSong;
         this.soundClips = soundClips;
+        this.view = view;
     }
 
     @Override
     public void execute() {
-        storedState = new Memento(album.getChildren(),
-                album.getParent(),
-                album.toString(),
-                album.getItems());
         for (SoundClip sc : soundClips) {
             album.addItem(sc);
         }
+        view.onClipsUpdated();
     }
 
     @Override
@@ -47,6 +27,8 @@ public class addSoundClipsCommand implements Command {
         for(SoundClip sc : soundClips) {
             album.removeItem(sc);
         }
+        view.onClipsUpdated();
+
     }
 
     @Override
@@ -54,8 +36,6 @@ public class addSoundClipsCommand implements Command {
         for (SoundClip sc : soundClips) {
             album.addItem(sc);
         }
-    }
-    public String commandAction() {
-        return null;
+        view.onClipsUpdated();
     }
 }
