@@ -125,13 +125,14 @@ public class MusicOrganizerWindow extends JFrame {
 	private SoundClipTable makeClipTable(){
 		SoundClipTable table = new SoundClipTable();
 
-		
 		table.addMouseListener(new MouseInputAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// if left-double-click @@@changed =2 to ==1
 				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2){
 					controller.playSoundClips();
+					System.out.println(getSelectedSoundClips().get(0).getRating() + " " +
+							getSelectedSoundClips().get(0).getFlagged());
 					System.out.println("clicked on clipTable");
 				}
 			}
@@ -168,7 +169,8 @@ public class MusicOrganizerWindow extends JFrame {
 	 * Return all the sound clips currently selected in the clip table.
 	 */
 	public List<SoundClip> getSelectedSoundClips(){
-		return clipTable.getClips(clipTable.getSelectedIndices());
+		int[] column = clipTable.getSelectedColumns();
+		return clipTable.getClips(column);
 	}
 	
 	/**

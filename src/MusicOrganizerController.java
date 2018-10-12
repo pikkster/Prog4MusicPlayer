@@ -144,11 +144,12 @@ public class MusicOrganizerController {
 		view.setUndoEnabled(true);
 	}
 
-	public void flag () {
+	public void flag (List<SoundClip> soundClips) {
+
 
 	}
 
-	public void rating () {
+	public void rating (List<SoundClip> soundClips) {
 
 	}
 }

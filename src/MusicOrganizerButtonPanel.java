@@ -170,7 +170,7 @@ public class MusicOrganizerButtonPanel extends JPanel {
 		JButton redoButton = new JButton(flagIcon);
 		redoButton.setToolTipText("Redo");
 		redoButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {controller.flag();}
+			public void actionPerformed(ActionEvent e) {controller.flag(view.getSelectedSoundClips());}
 		});
 		return redoButton;
 	}
@@ -180,7 +180,7 @@ public class MusicOrganizerButtonPanel extends JPanel {
 		JButton redoButton = new JButton(ratingIcon);
 		redoButton.setToolTipText("Redo");
 		redoButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {controller.rating();}
+			public void actionPerformed(ActionEvent e) {controller.rating(view.getSelectedSoundClips());}
 		});
 		return redoButton;
 	}
