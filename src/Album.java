@@ -27,7 +27,6 @@ public class Album<T> {
     public String toString () {
         return name;
     }
-    //set name of album
     //returns a ArrayList<T> with all items in album
     public List<T> getItems() {
         return items;

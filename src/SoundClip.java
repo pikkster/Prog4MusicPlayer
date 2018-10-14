@@ -32,6 +32,10 @@ public class SoundClip {
 		return file.getName();
 	}
 
+	public String songName() {
+		return file.getName().substring(0,file.getName().lastIndexOf("."));
+	}
+
 	public void setFlagged (boolean flag) {
 		this.flagged = flag;
 	}

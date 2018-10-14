@@ -90,7 +90,6 @@ public class MusicOrganizerWindow extends JFrame {
 				// if left-double-click @@@changed =2 to ==1
 				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2){
 					// The code here gets invoked whenever the user double clicks in the album tree
-					//ADDED CODE
 					makeClipTable();
 					onClipsUpdated();
 					System.out.println("show the sound clips for album " + getSelectedTreeNode().getUserObject());
@@ -131,8 +130,6 @@ public class MusicOrganizerWindow extends JFrame {
 				// if left-double-click @@@changed =2 to ==1
 				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2){
 					controller.playSoundClips();
-					System.out.println(getSelectedSoundClips().get(0).getRating() + " " +
-							getSelectedSoundClips().get(0).getFlagged());
 					System.out.println("clicked on clipTable");
 				}
 			}
@@ -169,8 +166,7 @@ public class MusicOrganizerWindow extends JFrame {
 	 * Return all the sound clips currently selected in the clip table.
 	 */
 	public List<SoundClip> getSelectedSoundClips(){
-		int[] column = clipTable.getSelectedColumns();
-		return clipTable.getClips(column);
+		return clipTable.getClips(clipTable.getSelectedRows());
 	}
 	
 	/**
@@ -251,5 +247,16 @@ public class MusicOrganizerWindow extends JFrame {
 
 	public void setRedoEnabled(boolean enabled){
 		this.buttonPanel.setRedoEnabled(enabled);
+	}
+
+	public String askForRating () {
+		return (String) JOptionPane.showInputDialog(
+				albumTree,
+				"Rating: ",
+				"Rating",
+				JOptionPane.PLAIN_MESSAGE,
+				null,
+				null,
+				"");
 	}
 }

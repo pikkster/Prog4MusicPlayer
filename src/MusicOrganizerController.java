@@ -1,3 +1,4 @@
+import java.net.SocketImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -145,12 +146,19 @@ public class MusicOrganizerController {
 	}
 
 	public void flag (List<SoundClip> soundClips) {
-
-
+		for (SoundClip sc : soundClips) {
+			if(!sc.getFlagged()) sc.setFlagged(true);
+			else {sc.setFlagged(false);}
+		}
+		view.onClipsUpdated();
 	}
 
 	public void rating (List<SoundClip> soundClips) {
-
+		int rating = Integer.parseInt(view.askForRating());
+		for (SoundClip sc : soundClips) {
+			sc.setRating(rating);
+		}
+		view.onClipsUpdated();
 	}
 }
 

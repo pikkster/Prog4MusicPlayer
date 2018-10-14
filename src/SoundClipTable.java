@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -8,8 +7,12 @@ public class SoundClipTable extends JTable {
 
 	private List<SoundClip> clips;
 	private String[] columnNames = {"Song","Flagged","Rating"};
-	private Object[][] data;
-
+	private ImageIcon flag = new ImageIcon("icons/Actions-flag-icon.png");
+	private ImageIcon one_heart = new ImageIcon("icons/1heart.png");
+	private ImageIcon two_heart = new ImageIcon("icons/2heart.png");
+	private ImageIcon three_heart = new ImageIcon("icons/3heart.png");
+	private ImageIcon four_heart = new ImageIcon("icons/4heart.png");
+	private ImageIcon five_heart = new ImageIcon("icons/5heart.png");
 	public SoundClipTable() {
 		super();
 		clips = new ArrayList<>();
@@ -21,32 +24,55 @@ public class SoundClipTable extends JTable {
 	 * @param a - the album which contents are to be displayed
 	 */
 	public void display(Album a){
-//		this.clearTable();
-
-		// to the instance variable 'clips'.
-		//
-		// Something like this:
-		//
-		// clips.addAll(a.getAllSoundClips());
+		this.clearTable();
 
 		clips.addAll(a.getItems());
 
-		DefaultTableModel model = new DefaultTableModel();
+		//creating JTable data for each new request
+		Object[][] temp = new Object[clips.size()][columnNames.length];
+		for(int i = 0;i<clips.size(); i++) {
+			temp[i][0] = clips.get(i).songName();
+			if (clips.get(i).getFlagged()) temp[i][1] = flag;
+			else {temp[i][1] = ""; }
 
-		for (String columnName : columnNames) {
-			model.addColumn(columnName);
+			if (clips.get(i).getRating() == 1) {
+				temp[i][2] = one_heart;
+			}else if (clips.get(i).getRating() == 2) {
+				temp[i][2] = two_heart;
+			}else if (clips.get(i).getRating() == 3) {
+				temp[i][2] = three_heart;
+			}else if (clips.get(i).getRating() == 4) {
+				temp[i][2] = four_heart;
+			} else if (clips.get(i).getRating() == 5) {
+				temp[i][2] = five_heart;
+			}
+			else {temp[i][2] = "";}
+
+//			temp[i][2] = clips.get(i).getRating();
 		}
-		this.setModel(model);
+		DefaultTableModel model = new DefaultTableModel(temp,columnNames){
 
-		this.setValueAt(clips.get(0).toString(),0 ,0);
-//		Object[] data = new Object[clips.size()];
-//		Iterator<SoundClip> it = clips.iterator();
-//		int i = 0;
-//		while(it.hasNext()){
-//			SoundClip s = it.next();
-//			data[i++] = s.toString();
-//		}
-//		this.setListData(data);
+			//Show imageicon instead of string
+			@Override
+			public Class getColumnClass(int columnIndex) {
+				if (columnIndex == 1 || columnIndex == 2) return ImageIcon.class;
+				return Object.class;
+			}
+			//make cells non-editable, user should not be able to edit a cell
+			//through table
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+
+
+		};
+
+		this.setModel(model);
+		this.setRowHeight(32);
+		this.getColumnModel().getColumn(0).setPreferredWidth(250);
+		this.getColumnModel().getColumn(1).setPreferredWidth(50);
+		this.getColumnModel().getColumn(2).setPreferredWidth(50);
 
 		invalidate();
 		revalidate();
@@ -54,26 +80,11 @@ public class SoundClipTable extends JTable {
 		repaint();
 	}
 
-	private JTable temp () {
-		data = new Object[clips.size()][columnNames.length];
-
-		for (int i = 0;i<clips.size();i++) {
-			for (int j = 0; j < 3; j++) {
-				data[i][0] = clips.get(i).toString();
-				data[i][1] = clips.get(i).getFlagged();
-				data[i][2] = clips.get(i).getRating();
-				System.out.println(data[i][j]);
-			}
-		}
-		return new JTable(data,columnNames);
-	}
-	
 	/**
 	 * Clears the contents of the table and the clips List
 	 */
 	private void clearTable(){
 		clips.removeAll(clips);
-//		this.setListData(new String[0]);
 	}
 	
 	/**
