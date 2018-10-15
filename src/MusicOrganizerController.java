@@ -44,12 +44,12 @@ public class MusicOrganizerController {
 		return root;
 	}
 
-	public Album<SoundClip> getFlaggedAlbum(){
+	public Album getFlaggedAlbum(){
 		flaggedAlbum = new Album<>("Flagged");
 		return flaggedAlbum;
 	}
 
-	public Album<SoundClip> getRatingAlbum () {
+	public Album getRatingAlbum () {
 		ratingAlbum = new Album<>("Rated Songs");
 		return ratingAlbum;
 	}

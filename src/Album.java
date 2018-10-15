@@ -15,15 +15,12 @@ public class Album<T> {
     //Constructor for Root album
     public Album (String name) {
         this.name = name;
-
     }
     //Constructor for Album
     private Album (String name, Album<T> parent) {
         this.name = name;
         this.parent = parent;
-
     }
-
     public String toString () {
         return name;
     }
