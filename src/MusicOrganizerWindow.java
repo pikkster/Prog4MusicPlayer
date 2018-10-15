@@ -65,7 +65,7 @@ public class MusicOrganizerWindow extends JFrame {
 	private JTree makeCatalogTree() {
 
 		DefaultMutableTreeNode tree_root = new DefaultMutableTreeNode();
-		tree_root.setUserObject((Album) controller.getRootAlbum());
+		tree_root.setUserObject(controller.getRootAlbum());
 
 		
 		final JTree tree = new JTree(tree_root);
@@ -170,8 +170,8 @@ public class MusicOrganizerWindow extends JFrame {
 	 * selection.
 	 * @return the selected Album
 	 */
-	public Album getSelectedAlbum() {
-		return (Album) getSelectedTreeNode().getUserObject();
+	public UserAlbum getSelectedAlbum() {
+		return  (UserAlbum) getSelectedTreeNode().getUserObject();
 	}
 
 	/**

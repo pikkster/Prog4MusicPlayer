@@ -1,11 +1,11 @@
 public class addNewAlbumCommand implements Command {
 
-    private Album<SoundClip> album;
+    private UserAlbum<SoundClip> album;
     private String newAlbum;
-    private Album<SoundClip> temp;
+    private UserAlbum<SoundClip> temp;
     MusicOrganizerWindow view;
 
-    public addNewAlbumCommand(Album<SoundClip> album,
+    public addNewAlbumCommand(UserAlbum<SoundClip> album,
                               String newAlbum,
                               MusicOrganizerWindow view) {
         this.album = album;

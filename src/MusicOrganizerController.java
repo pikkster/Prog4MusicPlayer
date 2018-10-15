@@ -13,7 +13,7 @@ public class MusicOrganizerController {
 	private Album ratingAlbum;
 
 	public MusicOrganizerController() {
-		root = new Album<>("All Sound Clips");
+		root = new UserAlbum<>("All Sound Clips");
 		
 		// Create the View in Model-View-Controller
 		view = new MusicOrganizerWindow(this);
@@ -45,19 +45,19 @@ public class MusicOrganizerController {
 	}
 
 	public Album getFlaggedAlbum(){
-		flaggedAlbum = new Album<>("Flagged");
+		flaggedAlbum = new SearchAlbum("Flagged");
 		return flaggedAlbum;
 	}
 
 	public Album getRatingAlbum () {
-		ratingAlbum = new Album<>("Rated Songs");
+		ratingAlbum = new SearchAlbum("Rated Songs");
 		return ratingAlbum;
 	}
 	
 	/**
 	 * Adds an album to the Music Organizer
 	 */
-	public void addNewAlbum(Album<SoundClip> album){
+	public void addNewAlbum(UserAlbum<SoundClip> album){
 		String newAlbum = view.promptForAlbumName();
 		Command command = new addNewAlbumCommand(album, newAlbum,view);
 		command.execute();
@@ -69,7 +69,7 @@ public class MusicOrganizerController {
 	/**
 	 * Removes an album from the Music Organizer
 	 */
-	public void deleteAlbum(Album<SoundClip> albumToRemove){
+	public void deleteAlbum(UserAlbum<SoundClip> albumToRemove){
 		Command command = new deleteAlbumCommand(albumToRemove,
 				albumToRemove.getParent(),
 				view);

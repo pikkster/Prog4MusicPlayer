@@ -1,11 +1,11 @@
 public class deleteAlbumCommand implements Command{
 
-    private Album<SoundClip> albumToRemove;
-    private Album<SoundClip> parent;
+    private UserAlbum<SoundClip> albumToRemove;
+    private UserAlbum<SoundClip> parent;
     MusicOrganizerWindow view;
 
-    public deleteAlbumCommand (Album<SoundClip> albumToRemove,
-                               Album<SoundClip> parent,
+    public deleteAlbumCommand (UserAlbum<SoundClip> albumToRemove,
+                               UserAlbum<SoundClip> parent,
                                MusicOrganizerWindow view) {
         this.albumToRemove = albumToRemove;
         this.parent = parent;

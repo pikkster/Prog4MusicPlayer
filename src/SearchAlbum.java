@@ -1,19 +1,23 @@
-public class SearchAlbum extends AlbumTemplate {
+import java.util.ArrayList;
+import java.util.List;
 
-    private String name;
+public class SearchAlbum<T> extends Album<T> {
 
-    public SearchAlbum(String rated_songs) {
-        this.name = rated_songs;
+    private List<SoundClip> items = new ArrayList<>();
+
+    public SearchAlbum(String name) {
+        super(name);
     }
 
     @Override
-    void addItem(Object o) {
+    public void addItem(T t) {
 
     }
 
     @Override
-    void removeItem(Object o) {
+    public void removeItem(T t) {
 
     }
+
 
 }
