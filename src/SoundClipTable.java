@@ -32,23 +32,24 @@ public class SoundClipTable extends JTable {
 		Object[][] temp = new Object[clips.size()][columnNames.length];
 		for(int i = 0;i<clips.size(); i++) {
 			temp[i][0] = clips.get(i).songName();
+
 			if (clips.get(i).getFlagged()) temp[i][1] = flag;
 			else {temp[i][1] = ""; }
 
-			if (clips.get(i).getRating() == 1) {
-				temp[i][2] = one_heart;
-			}else if (clips.get(i).getRating() == 2) {
-				temp[i][2] = two_heart;
-			}else if (clips.get(i).getRating() == 3) {
-				temp[i][2] = three_heart;
-			}else if (clips.get(i).getRating() == 4) {
-				temp[i][2] = four_heart;
-			} else if (clips.get(i).getRating() == 5) {
-				temp[i][2] = five_heart;
+			switch (clips.get(i).getRating()) {
+				case 1: temp[i][2] = one_heart;
+					break;
+				case 2: temp[i][2] = two_heart;
+					break;
+				case 3: temp[i][2] = three_heart;
+					break;
+				case 4: temp[i][2] = four_heart;
+					break;
+				case 5: temp[i][2] = five_heart;
+					break;
+				default: temp[i][2] = "";
+					break;
 			}
-			else {temp[i][2] = "";}
-
-//			temp[i][2] = clips.get(i).getRating();
 		}
 		DefaultTableModel model = new DefaultTableModel(temp,columnNames){
 
