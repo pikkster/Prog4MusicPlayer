@@ -4,11 +4,7 @@ import java.awt.event.MouseEvent;
 import java.util.Enumeration;
 import java.util.List;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.tree.*;
 
@@ -250,13 +246,17 @@ public class MusicOrganizerWindow extends JFrame {
 	}
 
 	public String askForRating () {
-		return (String) JOptionPane.showInputDialog(
-				albumTree,
-				"Rating: ",
+
+		Object[] ratings = {"0","1","2","3", "4", "5"};
+
+		return Integer.toString(JOptionPane.showOptionDialog(
+				clipTable,
+				"Rating for song: ",
 				"Rating",
+				JOptionPane.DEFAULT_OPTION,
 				JOptionPane.PLAIN_MESSAGE,
-				null,
-				null,
-				"");
+				new ImageIcon("icons/favourites_32.png"),
+				ratings,ratings[0]));
+
 	}
 }
