@@ -2,7 +2,6 @@
 *.xml
 *.idea
 .idea/workspace.xml
-
 /out
 /bin
 /.settings
