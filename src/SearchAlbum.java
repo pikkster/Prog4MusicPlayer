@@ -11,7 +11,9 @@ public class SearchAlbum<T> extends Album<T> {
 
     @Override
     public void addItem(T t) {
-
+        if(!hasItem(t) && isFlagged((SoundClip) t)) {
+            items.add((SoundClip) t);
+        }
     }
 
     @Override
@@ -19,5 +21,8 @@ public class SearchAlbum<T> extends Album<T> {
 
     }
 
+    private boolean isFlagged (SoundClip t) {
+        return t.getFlagged();
+    }
 
 }

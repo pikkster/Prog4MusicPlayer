@@ -83,7 +83,7 @@ public class MusicOrganizerButtonPanel extends JPanel {
 		newAlbumButton.setToolTipText("New Album");
 		newAlbumButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.addNewAlbum(view.getSelectedAlbum());
+				controller.addNewAlbum((UserAlbum<SoundClip>) view.getSelectedAlbum());
 			}
 		});
 		return newAlbumButton;
@@ -95,7 +95,7 @@ public class MusicOrganizerButtonPanel extends JPanel {
 		deleteAlbumButton.setToolTipText("Delete Selected Album");
 		deleteAlbumButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.deleteAlbum(view.getSelectedAlbum());
+				controller.deleteAlbum((UserAlbum<SoundClip>) view.getSelectedAlbum());
 			}
 		});
 		return deleteAlbumButton;
@@ -183,6 +183,13 @@ public class MusicOrganizerButtonPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {controller.rating(view.getSelectedSoundClips());}
 		});
 		return redoButton;
+	}
+
+	void setButtonsEnabled (boolean disable) {
+		this.newAlbumButton.setEnabled(disable);
+		this.deleteAlbumButton.setEnabled(disable);
+		this.addSoundClipsButton.setEnabled(disable);
+		this.removeSoundClipsButton.setEnabled(disable);
 	}
 
 }

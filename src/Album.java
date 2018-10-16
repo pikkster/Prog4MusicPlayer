@@ -4,9 +4,8 @@ import java.util.List;
 public abstract class Album<T> {
 
     /*
-    * Class representing our album structure
-    * Tree library for albums
-    */
+        Template method album
+     */
     List<Album<T>> children = new ArrayList<>();
     Album<T> parent;
     String name;
@@ -21,8 +20,6 @@ public abstract class Album<T> {
         this.name = name;
         this.parent = parent;
     }
-
-
     public String toString () {
         return name;
     }
@@ -41,26 +38,9 @@ public abstract class Album<T> {
 
     public abstract void addItem(T t);
 
-    //MAKE ABSTRACT
-//    public void addItem (T t) {
-//        if(!hasItem(t)) {
-//            if (hasParent()) {
-//                parent.addItem(t);
-//            }
-//            items.add(t);
-//        }
-//    }
-
-
     //removes item from album specified
     public abstract void removeItem(T t);
 
-//    public void removeItem (T t) {
-//        for (Album<T> a : children) {
-//            a.removeItem(t);
-//        }
-//        this.items.remove(t);
-//    }
     //checks if items is in album, item.contains() checks ArrayList<T> items
     public boolean hasItem (T t) {
         return items.contains(t);
@@ -68,10 +48,6 @@ public abstract class Album<T> {
     //check for parent, needed to see when we're at root
     public boolean hasParent () {
         return parent != null;
-    }
-
-    private void addAlbum (Album<T> album) {
-        this.children.add(album);
     }
 
 //    public Album<T> copy (){
@@ -84,7 +60,9 @@ public abstract class Album<T> {
 //        }
 //        return albumCopy;
 //    }
-
+//    private void addAlbum (Album<T> album) {
+//        this.children.add(album);
+//    }
 }
 
 class AlbumNameAlreadyUsedException extends Exception{

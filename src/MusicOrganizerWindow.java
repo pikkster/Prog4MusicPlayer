@@ -1,4 +1,3 @@
-
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.util.Enumeration;
@@ -88,6 +87,14 @@ public class MusicOrganizerWindow extends JFrame {
 					// The code here gets invoked whenever the user double clicks in the album tree
 					makeClipTable();
 					onClipsUpdated();
+
+					//needs cleaning up
+					if (getSelectedTreeNode().getUserObject().equals(controller.getFlagAlbum())
+					|| getSelectedTreeNode().getUserObject().equals(controller.getRateAlbum())) {
+						controller.disableButtons(false);
+					} else {
+						controller.disableButtons(true);
+					}
 					System.out.println("show the sound clips for album " + getSelectedTreeNode().getUserObject());
 				}
 			}
@@ -170,8 +177,8 @@ public class MusicOrganizerWindow extends JFrame {
 	 * selection.
 	 * @return the selected Album
 	 */
-	public UserAlbum getSelectedAlbum() {
-		return  (UserAlbum) getSelectedTreeNode().getUserObject();
+	public Album getSelectedAlbum() {
+		return  (Album) getSelectedTreeNode().getUserObject();
 	}
 
 	/**
@@ -243,6 +250,11 @@ public class MusicOrganizerWindow extends JFrame {
 
 	public void setRedoEnabled(boolean enabled){
 		this.buttonPanel.setRedoEnabled(enabled);
+	}
+
+	//Disable buttons when search album is chosen
+	void disableButtons (boolean disable) {
+		this.buttonPanel.setButtonsEnabled(disable);
 	}
 
 	public String askForRating () {

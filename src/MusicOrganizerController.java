@@ -9,8 +9,8 @@ public class MusicOrganizerController {
 	private Album root;
 	private Stack<Command> undoStack = new Stack<>();
 	private Stack<Command> redoStack = new Stack<>();
-	private Album flaggedAlbum;
-	private Album ratingAlbum;
+	private SearchAlbum flaggedAlbum;
+	private SearchAlbum ratingAlbum;
 
 	public MusicOrganizerController() {
 		root = new UserAlbum<>("All Sound Clips");
@@ -29,7 +29,7 @@ public class MusicOrganizerController {
 	 * Load the sound clips found in all subfolders of a path on disk. If path is not
 	 * an actual folder on disk, has no effect.
 	 */
-	public Set<SoundClip> loadSoundClips(String path) {
+	Set<SoundClip> loadSoundClips(String path) {
 		Set<SoundClip> clips = SoundClipLoader.loadSoundClips(path);
 		for (SoundClip sc : clips) {
 			root.addItem(sc);
@@ -40,36 +40,43 @@ public class MusicOrganizerController {
 	/**
 	 * Returns the root album
 	 */
-	public Album<SoundClip> getRootAlbum(){
+	Album<SoundClip> getRootAlbum(){
 		return root;
 	}
 
-	public Album getFlaggedAlbum(){
+	SearchAlbum getFlaggedAlbum(){
 		flaggedAlbum = new SearchAlbum("Flagged");
 		return flaggedAlbum;
 	}
 
-	public Album getRatingAlbum () {
+	SearchAlbum getRatingAlbum () {
 		ratingAlbum = new SearchAlbum("Rated Songs");
 		return ratingAlbum;
 	}
+
+	SearchAlbum getFlagAlbum () {
+		return flaggedAlbum;
+	}
+	SearchAlbum getRateAlbum () {
+		return ratingAlbum;
+	}
+
 	
 	/**
 	 * Adds an album to the Music Organizer
 	 */
-	public void addNewAlbum(UserAlbum<SoundClip> album){
+	void addNewAlbum(UserAlbum<SoundClip> album){
 		String newAlbum = view.promptForAlbumName();
 		Command command = new addNewAlbumCommand(album, newAlbum,view);
 		command.execute();
 		undoStack.push(command);
 		undoPush(command);
-
 	}
 	
 	/**
 	 * Removes an album from the Music Organizer
 	 */
-	public void deleteAlbum(UserAlbum<SoundClip> albumToRemove){
+	void deleteAlbum(UserAlbum<SoundClip> albumToRemove){
 		Command command = new deleteAlbumCommand(albumToRemove,
 				albumToRemove.getParent(),
 				view);
@@ -82,7 +89,7 @@ public class MusicOrganizerController {
 	/**
 	 * Adds sound clips to an album
 	 */
-	public void addSoundClips(Album<SoundClip> albumToAddSong, List<SoundClip> soundClips){
+	void addSoundClips(Album<SoundClip> albumToAddSong, List<SoundClip> soundClips){
 		Command command = new addSoundClipsCommand(albumToAddSong,
 				soundClips,
 				view);
@@ -95,7 +102,7 @@ public class MusicOrganizerController {
 	/**
 	 * Removes sound clips from an album
 	 */
-	public void removeSoundClips(Album<SoundClip> albumToRemoveSong, List<SoundClip> soundclips){
+	void removeSoundClips(Album<SoundClip> albumToRemoveSong, List<SoundClip> soundclips){
 		Command command = new removeSoundClipsCommand(albumToRemoveSong,
 				soundclips,
 				view);
@@ -111,13 +118,13 @@ public class MusicOrganizerController {
 	 * this method is called, the selected sound clips in the 
 	 * SoundClipTable are played.
 	 */
-	public void playSoundClips(){
+	void playSoundClips(){
 		List<SoundClip> l = view.getSelectedSoundClips();
 		for(int i=0;i<l.size();i++)
 			queue.enqueue(l.get(i));
 	}
 
-	public void undo () {
+	void undo () {
 		if (undoStack.size()>0) {
 			Command command = undoStack.pop();
 			redoStack.push(command);
@@ -128,7 +135,7 @@ public class MusicOrganizerController {
 			}
 		}
 	}
-	public void redo () {
+	void redo () {
 		if (redoStack.size()>0) {
 			Command command = redoStack.pop();
 			undoStack.push(command);
@@ -143,20 +150,25 @@ public class MusicOrganizerController {
 		view.setUndoEnabled(true);
 	}
 
-	public void flag (List<SoundClip> soundClips) {
+	void flag (List<SoundClip> soundClips) {
 		for (SoundClip sc : soundClips) {
 			if(!sc.getFlagged()) sc.setFlagged(true);
 			else {sc.setFlagged(false);}
 		}
+
 		view.onClipsUpdated();
 	}
 
-	public void rating (List<SoundClip> soundClips) {
+	void rating (List<SoundClip> soundClips) {
 		int rating = Integer.parseInt(view.askForRating());
 		for (SoundClip sc : soundClips) {
 			sc.setRating(rating);
 		}
 		view.onClipsUpdated();
+	}
+
+	void disableButtons (boolean disable) {
+		view.disableButtons(disable);
 	}
 }
 
